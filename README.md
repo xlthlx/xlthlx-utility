@@ -1,5 +1,7 @@
 # Xlthlx Utility
 
+![Version](https://img.shields.io/badge/version-1.0.0-blueviolet) [![License](https://img.shields.io/badge/license-GPL_v3%2B-blueviolet)](https://github.com/xlthlx/xlthlx-utility/blob/main/LICENSE)
+
 **Contributors:** xlthlx \
 **Donate link:** https://paypal.me/xlthlx \
 **Tags:** xlthlx.com,functionalities,theme \
@@ -16,34 +18,13 @@ Sets of extra functionalities for xlthlx.com theme.
 
 Sets of extra functionalities for xlthlx.com theme.
 
-## Installation
-
-1. Upload `comments-subscriber` folder to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-
-## Frequently Asked Questions
-
-N/A
-
-## Screenshots
-
-N/A
-
 ## Changelog
 
 ### 1.0.0
 
 * First release
 
-## Upgrade Notice
-
-N/A
-
 ## Licence
 
 Xlthlx Utility is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with Xlthlx Utility
 If not, see https://www.gnu.org/licenses/gpl-3.0.html.
-
-## Support
-
-N/A

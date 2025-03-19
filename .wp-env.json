@@ -1,13 +1,14 @@
 {
   "core": null,
   "themes": [
-    "https://downloads.wordpress.org/theme/twentytwentyfive.zip"
+    "https://downloads.wordpress.org/theme/twentytwentyfive.zip",
+    "https://github.com/xlthlx/xlthlx.com/archive/refs/heads/main.zip"
   ],
   "plugins": [
     ".",
-    "https://downloads.wordpress.org/plugin/plugin-check.zip",
     "https://downloads.wordpress.org/plugin/query-monitor.zip",
-    "https://downloads.wordpress.org/plugin/wordpress-beta-tester.zip"
+    "https://downloads.wordpress.org/plugin/contact-form-7.zip",
+    "https://downloads.wordpress.org/plugin/flamingo.zip"
   ],
   "mappings": {
     "wp-content": "./wp-content"
