@@ -1,0 +1,25 @@
+{
+  "core": null,
+  "themes": [
+    "https://downloads.wordpress.org/theme/twentytwentyfive.zip"
+  ],
+  "plugins": [
+    ".",
+    "https://downloads.wordpress.org/plugin/plugin-check.zip",
+    "https://downloads.wordpress.org/plugin/query-monitor.zip",
+    "https://downloads.wordpress.org/plugin/wordpress-beta-tester.zip"
+  ],
+  "mappings": {
+    "wp-content": "./wp-content"
+  },
+  "port": 1090,
+  "testsPort": 1091,
+  "config": {
+    "ALTERNATE_WP_CRON": true,
+    "SCRIPT_DEBUG": true,
+    "WP_DEBUG": true,
+    "WP_DEBUG_DISPLAY": false,
+    "WP_DEBUG_LOG": true,
+    "WP_DEVELOPMENT_MODE": "plugin"
+  }
+}

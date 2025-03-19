@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress Plugin Coding Standards">
+
+	<description>A custom set of code standard rules to check for WordPress plugins.</description>
+
+	<file>.</file>
+    <exclude-pattern>*/.git/*</exclude-pattern>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+
+    <arg value="sp"/>
+    <arg name="basepath" value="."/>
+    <arg name="colors"/>
+    <arg name="extensions" value="php"/>
+    <arg name="parallel" value="50"/>
+
+	<rule ref="WordPress">
+		<exclude name="WordPress.NamingConventions.PrefixAllGlobals.ShortPrefixPassed"/>
+	</rule>
+
+    <arg name="cache" value="./phpcs.xml.cache"/>
+
+    <rule ref="WordPress-Docs"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array" value="xlthlx"/>
+		</properties>
+	</rule>
+
+	<config name="minimum_supported_wp_version" value="5.9"/>
+
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment">
+		<properties>
+			<property name="exact" value="false"/>
+			<property name="alignMultilineItems" value="!=100"/>
+			<property name="ignoreNewlines" value="false"/>
+		</properties>
+	</rule>
+
+	<config name="testVersion" value="7.4-"/>
+	<rule ref="PHPCompatibility">
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_finallyFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_yieldFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_ellipsisFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_powFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_pow_equalFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_spaceshipFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_coalesceFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_coalesce_equalFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_yield_fromFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.t_traitFound"/>
+		<exclude name="PHPCompatibility.Operators.NewOperators.t_coalesceFound"/>
+		<exclude name="PHPCompatibility.FunctionUse.NewFunctions.array_columnFound"/>
+	</rule>
+
+</ruleset>
