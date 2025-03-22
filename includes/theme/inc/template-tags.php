@@ -16,7 +16,7 @@ if ( ! function_exists( 'xlt_get_link' ) ) {
 	 *
 	 * @return string
 	 */
-	function xlt_get_link( $args, $link, $name, $position ) {
+	function xlt_get_link( array $args, string $link, string $name, string $position ): string {
 		$return  = $args['before'];
 		$return .= sprintf(
 			$args['link'],
@@ -34,11 +34,11 @@ if ( ! function_exists( 'xlt_comment_form' ) ) {
 	/**
 	 * Custom comments form.
 	 *
-	 * @param int|bool $post_id The post ID.
+	 * @param bool|int $post_id The post ID.
 	 *
 	 * @return void
 	 */
-	function xlt_comment_form( $post_id = false ) {
+	function xlt_comment_form( bool|int $post_id = false ): void {
 
 		$comments_args = array(
 			'format'               => 'html5',
@@ -86,11 +86,11 @@ if ( ! function_exists( 'xlt_comment_form_en' ) ) {
 	/**
 	 * Custom english comments form.
 	 *
-	 * @param int|bool $post_id The post ID.
+	 * @param bool|int $post_id The post ID.
 	 *
 	 * @return void
 	 */
-	function xlt_comment_form_en( $post_id = false ) {
+	function xlt_comment_form_en( bool|int $post_id = false ): void {
 
 		$comments_args = array(
 			'format'               => 'html5',
@@ -143,12 +143,12 @@ if ( ! function_exists( 'xlt_old_posts_warning' ) ) {
 	/**
 	 * Old posts warning.
 	 *
-	 * @param string   $lang Language.
-	 * @param int|bool $post_id The post ID.
+	 * @param string        $lang Language.
+	 * @param bool|int|null $post_id The post ID.
 	 *
 	 * @return string
 	 */
-	function xlt_old_posts_warning( $lang, $post_id = null ): string {
+	function xlt_old_posts_warning( string $lang, bool|int $post_id = null ): string {
 
 		$warning = '';
 
@@ -211,7 +211,7 @@ if ( ! function_exists( 'xlt_get_avatar' ) ) {
 	 *
 	 * @return string
 	 */
-	function xlt_get_avatar( $comment, $author_name ) {
+	function xlt_get_avatar( object $comment, string $author_name ): string {
 		$args = array(
 			'size'    => '60',
 			'default' => '404',
@@ -245,7 +245,7 @@ if ( ! function_exists( 'xlt_get_author' ) ) {
 	 *
 	 * @return string
 	 */
-	function xlt_get_author( $comment ) {
+	function xlt_get_author( object $comment ): string {
 
 		$author = $comment->comment_author;
 
@@ -265,7 +265,7 @@ if ( ! function_exists( 'xlt_clean' ) ) {
 	 *
 	 * @return string|string[]|null
 	 */
-	function xlt_clean( $string ) {
+	function xlt_clean( string $string ): array|string|null {
 		$string = str_replace( ' ', '', $string );
 
 		return preg_replace( '/[^A-Za-z0-9\-]/', '', $string );
@@ -280,9 +280,9 @@ if ( ! function_exists( 'xlt_gravatar_exists' ) ) {
 	 *
 	 * @return bool
 	 */
-	function xlt_gravatar_exists( $url ) {
+	function xlt_gravatar_exists( string $url ): bool {
 		$headers = get_headers( $url );
-		if ( false === strpos( $headers[0], '200' ) ) {
+		if ( ! str_contains( $headers[0], '200' ) ) {
 			$has_valid_avatar = false;
 		} else {
 			$has_valid_avatar = true;
@@ -300,7 +300,7 @@ if ( ! function_exists( 'xlt_get_file_content' ) ) {
 	 *
 	 * @return  string Content of $file_path
 	 */
-	function xlt_get_file_content( $file_path ) {
+	function xlt_get_file_content( string $file_path ): string {
 
 		global $wp_filesystem;
 		require_once ABSPATH . '/wp-admin/includes/file.php';
@@ -319,13 +319,13 @@ if ( ! function_exists( 'xlt_get_file_content' ) ) {
 
 if ( ! function_exists( 'xlt_get_url_content' ) ) {
 	/**
-	 * Get contents from a url.
+	 * Get contents from an url.
 	 *
 	 * @param string $url The url to get the content from.
 	 *
 	 * @return false|mixed
 	 */
-	function xlt_get_url_content( $url ) {
+	function xlt_get_url_content( string $url ): mixed {
 
 		$response = wp_remote_get( $url );
 
@@ -345,7 +345,7 @@ if ( ! function_exists( 'xlt_get_url_from_href' ) ) {
 	 *
 	 * @return string
 	 */
-	function xlt_get_url_from_href( $string ) {
+	function xlt_get_url_from_href( string $string ): string {
 
 		$re = '/href="(.*?)"/i';
 		preg_match( $re, $string, $matches, PREG_OFFSET_CAPTURE );
@@ -362,7 +362,7 @@ if ( ! function_exists( 'xlt_get_menu_items' ) ) {
 	 *
 	 * @return array
 	 */
-	function xlt_get_menu_items( $theme_location ) {
+	function xlt_get_menu_items( string $theme_location ): array {
 
 		$menu_list = array();
 
@@ -375,8 +375,7 @@ if ( ! function_exists( 'xlt_get_menu_items' ) ) {
 				$menu_items = wp_get_nav_menu_items( $menu->term_id );
 				if ( $menu_items ) {
 
-					$menu_list = array();
-					$bool      = false;
+					$bool = false;
 
 					$i = 0;
 					foreach ( $menu_items as $menu_item ) {
@@ -418,7 +417,7 @@ if ( ! function_exists( 'xlt_get_menu_items' ) ) {
 	 *
 	 * @return array
 	 */
-	function xlt_get_arr( $menu, $menu_array, $i ) {
+	function xlt_get_arr( object $menu, array $menu_array, int $i ): array {
 		global $lang;
 
 		$menu_array[ $i ]['url']     = '#' !== $menu->url ? $menu->url : false;
@@ -440,7 +439,7 @@ if ( ! function_exists( 'xlt_pagination' ) ) {
 	 *
 	 * @return string
 	 */
-	function xlt_pagination( $wp_query, $paged ) {
+	function xlt_pagination( object $wp_query, string $paged ): string {
 		global $lang;
 
 		$first    = 'Primo';
@@ -529,7 +528,7 @@ if ( ! function_exists( 'xlt_get_the_terms' ) ) {
 	 *
 	 * @return string Returns the list of elements.
 	 */
-	function xlt_get_the_terms( $taxonomy, $cut = false ) {
+	function xlt_get_the_terms( string $taxonomy, bool $cut = false ): string {
 
 		$all_terms = '';
 		$terms     = get_the_terms( get_the_ID(), $taxonomy );
@@ -560,31 +559,49 @@ if ( ! function_exists( 'xlt_get_years' ) ) {
 	/**
 	 * Returns a list of years excluding $actual_year.
 	 *
-	 * @param string $actual_year The current year.
+	 * @param string|null $actual_year The current year.
 	 *
 	 * @return void
 	 */
-	function xlt_get_years( $actual_year = null ) {
-		global $wpdb, $lang;
+	function xlt_get_years( string $actual_year = null ): void {
+		global $lang;
 
 		$array = array();
-
-		$years = $wpdb->get_results( "SELECT DISTINCT YEAR( post_date ) AS year FROM $wpdb->posts WHERE post_status = 'publish' and post_date <= now( ) and post_type = 'post' GROUP BY YEAR( post_date ) ORDER BY post_date DESC" );
+		$years = array();
 
 		$url = '/';
 		if ( 'en' === $lang ) {
 			$url .= 'en/';
 		}
 
+		$args = array(
+			'post_status' => array( 'publish' ),
+			'order'       => 'DESC',
+			'orderby'     => 'date',
+			'nopaging'    => true,
+		);
+
+		$years_query = new WP_Query( $args );
+
+		if ( $years_query->have_posts() ) {
+
+			while ( $years_query->have_posts() ) {
+				$years_query->the_post();
+				$years[ get_the_date( 'Y' ) ] = get_the_date( 'Y' );
+			}
+
+			wp_reset_postdata();
+		}
+
 		foreach ( $years as $year ) {
-			if ( ( isset( $actual_year ) ) && $year->year === $actual_year ) {
-				$array[] = '<strong>' . $year->year . '</strong>';
+			if ( ( isset( $actual_year ) ) && $year === $actual_year ) {
+				$array[] = '<strong>' . esc_attr( $year ) . '</strong>';
 			} else {
-				$array[] = '<a href="' . home_url( '/' ) . $year->year . $url . '">' . $year->year . '</a>';
+				$array[] = '<a href="' . home_url( '/' ) . esc_attr( $year ) . esc_attr( $url ) . '">' . esc_attr( $year ) . '</a>';
 			}
 		}
 
-		echo implode( ' ', $array );
+		echo wp_kses( implode( ' ', $array ), 'post' );
 	}
 }
 
@@ -592,17 +609,35 @@ if ( ! function_exists( 'xlt_get_months' ) ) {
 	/**
 	 * Returns a list of months archives based on $year.
 	 *
-	 * @param string $year The year.
-	 * @param string $actual_month The current month.
+	 * @param string      $year The year.
+	 * @param string|null $actual_month The current month.
 	 *
 	 * @return void
 	 */
-	function xlt_get_months( $year, $actual_month = null ) {
-		global $wpdb, $lang;
+	function xlt_get_months( string $year, string $actual_month = null ): void {
+		global $lang;
 
-		$array = array();
+		$array  = array();
+		$months = array();
 
-		$months = $wpdb->get_results( $wpdb->prepare( "SELECT DISTINCT MONTH( post_date ) AS month FROM $wpdb->posts WHERE post_status = 'publish' and post_date <= now( ) and post_type = 'post' and YEAR( post_date ) = %s GROUP BY MONTH( post_date ) ORDER BY post_date ASC", $year ) );
+		$args = array(
+			'post_status' => array( 'publish' ),
+			'order'       => 'DESC',
+			'orderby'     => 'date',
+			'nopaging'    => true,
+		);
+
+		$months_query = new WP_Query( $args );
+
+		if ( $months_query->have_posts() ) {
+
+			while ( $months_query->have_posts() ) {
+				$months_query->the_post();
+				$months[ get_the_date( 'm' ) ] = get_the_date( 'm' );
+			}
+
+			wp_reset_postdata();
+		}
 
 		$url = '/';
 		if ( 'en' === $lang ) {
@@ -610,18 +645,18 @@ if ( ! function_exists( 'xlt_get_months' ) ) {
 		}
 
 		foreach ( $months as $month ) {
-			$l_month    = sprintf( '%02d', $month->month );
+			$l_month    = sprintf( '%02d', $month );
 			$datetime   = $year . '-' . $l_month . '-01';
-			$month_name = ( 'en' === $lang ) ? date( 'F', strtotime( $datetime ) ) : date_i18n( 'F', strtotime( $datetime ) );
+			$month_name = ( 'en' === $lang ) ? gmdate( 'F', strtotime( $datetime ) ) : date_i18n( 'F', strtotime( $datetime ) );
 
-			if ( ( isset( $actual_month ) ) && $actual_month === $month->month ) {
+			if ( ( isset( $actual_month ) ) && $actual_month === $month ) {
 				$array[] = '<strong>' . $month_name . '</strong>';
 			} else {
 				$array[] = '<a href="' . home_url( '/' ) . $year . '/' . $l_month . $url . '">' . $month_name . '</a>';
 			}
 		}
 
-		echo implode( ' ', $array );
+		echo wp_kses( implode( ' ', $array ), 'post' );
 	}
 }
 
@@ -633,7 +668,7 @@ if ( ! function_exists( 'xlt_print_svg' ) ) {
 	 *
 	 * @return string
 	 */
-	function xlt_print_svg( $svg ) {
+	function xlt_print_svg( string $svg ): string {
 		$file = get_template_directory() . $svg;
 
 		return xlt_get_file_content( $file );
@@ -649,7 +684,7 @@ if ( ! function_exists( 'xlt_atom_date' ) ) {
 	 * @return string
 	 * @throws Exception Exception.
 	 */
-	function xlt_atom_date( $date ) {
+	function xlt_atom_date( string $date ): string {
 		// @codingStandardsIgnoreStart
 		return ( new DateTime( $date, new DateTimeZone( 'Europe/Rome' ) ) )->format( DateTimeInterface::ATOM );
 		// @codingStandardsIgnoreEnd
@@ -662,7 +697,7 @@ if ( ! function_exists( 'xlt_related_links' ) ) {
 	 *
 	 * @return string
 	 */
-	function xlt_related_links() {
+	function xlt_related_links(): string {
 		$related_links = '';
 
 		if ( is_single() ) {
@@ -741,15 +776,16 @@ if ( ! function_exists( 'xlt_get_switcher' ) ) {
 	 *
 	 * @return void
 	 */
-	function xlt_get_switcher() {
+	function xlt_get_switcher(): void {
 		global $lang;
 
 		if ( 'en' === $lang ) { ?>
-			<a href="<?php echo get_url_trans(); ?>" class="svg-btn" title="Italiano">Italiano</a>&nbsp;&mdash;&nbsp;
+			<a href="<?php echo esc_url( get_url_trans() ); ?>" class="svg-btn" title="Italiano">Italiano</a>&nbsp;&mdash;&nbsp;
 			<span>English</span>
 		<?php } else { ?>
 			<span>Italiano</span>&nbsp;&mdash;&nbsp;
-			<a class="svg-btn" href="<?php echo get_url_trans(); ?>" title="English">English</a>
-		<?php }
+			<a class="svg-btn" href="<?php echo esc_url( get_url_trans() ); ?>" title="English">English</a>
+			<?php
+		}
 	}
 }

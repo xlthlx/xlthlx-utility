@@ -53,3 +53,4 @@ package-lock.json
 /wp-content
 node_modules
 phpcs.xml.cache
+/report.txt

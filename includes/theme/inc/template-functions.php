@@ -15,7 +15,7 @@ use Highlight\Highlighter;
  *
  * @return void
  */
-function xlt_remove_admin_bar_wp_logo() {
+function xlt_remove_admin_bar_wp_logo(): void {
 	global $wp_admin_bar;
 	$wp_admin_bar->remove_node( 'wp-logo' );
 	$wp_admin_bar->remove_node( 'comments' );
@@ -28,7 +28,7 @@ add_action( 'wp_before_admin_bar_render', 'xlt_remove_admin_bar_wp_logo', 20 );
  *
  * @return void
  */
-function xlt_admin_footer_remove() {
+function xlt_admin_footer_remove(): void {
 	remove_filter( 'update_footer', 'core_update_footer' );
 }
 
@@ -39,7 +39,7 @@ add_action( 'admin_menu', 'xlt_admin_footer_remove' );
  *
  * @return string The content that will be printed.
  */
-function xlt_custom_admin_footer_text() {
+function xlt_custom_admin_footer_text(): string {
 	return '';
 }
 
@@ -54,7 +54,7 @@ add_filter( 'admin_footer_text', 'xlt_custom_admin_footer_text' );
  * @return string
  * @throws Exception Exception.
  */
-function xlt_render_code_block( $block_content, $block ) {
+function xlt_render_code_block( string $block_content, array $block ): string {
 	if ( 'core/code' !== $block['blockName'] ) {
 		return $block_content;
 	}
@@ -72,7 +72,7 @@ add_filter( 'render_block', 'xlt_render_code_block', 10, 2 );
  * @return string Rendered block type output.
  * @throws Exception Exception.
  */
-function xlt_render_code( $content ) {
+function xlt_render_code( string $content ): string {
 
 	$hl = new Highlighter();
 	$hl->setAutodetectLanguages( array( 'php', 'javascript', 'html' ) );
@@ -105,7 +105,7 @@ function xlt_render_code( $content ) {
  *
  * @return array
  */
-function xlt_comment_fields_custom_order( $fields ) {
+function xlt_comment_fields_custom_order( array $fields ): array {
 
 	$comment_field = $fields['comment'];
 	$author_field  = $fields['author'];
@@ -132,7 +132,7 @@ add_filter( 'comment_form_fields', 'xlt_comment_fields_custom_order' );
  *
  * @return string
  */
-function xlt_en_comment_redirect( $location, $comment ) {
+function xlt_en_comment_redirect( string $location, object $comment ): string {
 	if ( ! isset( $comment ) || empty( $comment->comment_post_ID ) ) {
 		return $location;
 	}
@@ -154,7 +154,7 @@ add_filter( 'comment_post_redirect', 'xlt_en_comment_redirect', 10, 2 );
  *
  * @return void
  */
-function xlt_hide_slim_seo_meta_box() {
+function xlt_hide_slim_seo_meta_box(): void {
 	$context = apply_filters( 'slim_seo_meta_box_context', 'normal' );
 	remove_meta_box( 'slim-seo', null, $context );
 }
@@ -166,7 +166,7 @@ add_action( 'add_meta_boxes', 'xlt_hide_slim_seo_meta_box', 20 );
  *
  * @return string
  */
-function xlt_document_title_separator() {
+function xlt_document_title_separator(): string {
 	return '|';
 }
 
@@ -177,7 +177,7 @@ add_filter( 'document_title_separator', 'xlt_document_title_separator' );
  *
  * @return void
  */
-function xlt_unregister_tags() {
+function xlt_unregister_tags(): void {
 	unregister_taxonomy_for_object_type( 'post_tag', 'post' );
 }
 
@@ -188,7 +188,7 @@ add_action( 'init', 'xlt_unregister_tags' );
  *
  * @return void
  */
-function xlt_404_plausible() {
+function xlt_404_plausible(): void {
 	if ( is_404() ) {
 		?>
 		<script>plausible('404', {props: {path: document.location.pathname}})</script>
@@ -203,7 +203,7 @@ add_action( 'wp_head', 'xlt_404_plausible' );
  *
  * @return void
  */
-function xlt_admin_color_scheme() {
+function xlt_admin_color_scheme(): void {
 
 	wp_admin_css_color(
 		'xlthlx',
@@ -227,7 +227,7 @@ add_action( 'admin_init', 'xlt_admin_color_scheme' );
  *
  * @return string[]
  */
-function xlt_hide_seo_columns( $columns ) {
+function xlt_hide_seo_columns( array $columns ): array {
 	unset( $columns['meta_title'], $columns['meta_description'], $columns['description'], $columns['noindex'], $columns['index'] );
 
 	return $columns;
@@ -246,7 +246,7 @@ add_filter( 'manage_tvseries_posts_columns', 'xlt_hide_seo_columns', 20 );
  *
  * @return string[]
  */
-function xlt_add_remove_link_columns( $post_columns ) {
+function xlt_add_remove_link_columns( array $post_columns ): array {
 
 	$post_columns['link_description'] = 'Descrizione';
 
@@ -263,7 +263,7 @@ function xlt_add_remove_link_columns( $post_columns ) {
  *
  * @return void
  */
-function xlt_add_link_columns_data( $column_name, $post_id ) {
+function xlt_add_link_columns_data( string $column_name, int $post_id ): void {
 
 	if ( 'link_description' === $column_name ) {
 		$val = get_bookmark_field( 'link_description', $post_id );
@@ -271,14 +271,14 @@ function xlt_add_link_columns_data( $column_name, $post_id ) {
 			return;
 		}
 
-		echo $val;
+		echo esc_attr( $val );
 	}
 }
 
 /**
  * All hooks for custom columns.
  */
-function xlt_setup_columns() {
+function xlt_setup_columns(): void {
 	add_filter( 'manage_link-manager_columns', 'xlt_add_remove_link_columns' );
 	add_action( 'manage_link_custom_column', 'xlt_add_link_columns_data', 10, 2 );
 }
@@ -292,7 +292,7 @@ add_action( 'load-link-manager.php', 'xlt_setup_columns' );
  *
  * @return void
  */
-function xlt_en_toolbar_link( $wp_admin_bar ) {
+function xlt_en_toolbar_link( object $wp_admin_bar ): void {
 
 	global $pagenow;
 
@@ -319,13 +319,12 @@ add_action( 'admin_bar_menu', 'xlt_en_toolbar_link', 999 );
  *
  * @return void
  */
-function xlt_deepl_auth_key_callback_function( $val ) {
+function xlt_deepl_auth_key_callback_function( array $val ): void {
 	$id          = $val['id'];
 	$option_name = $val['option_name'];
 	?>
 	<label for="<?php echo esc_attr( $id ); ?>">Auth Key</label>
-	<input type="password" name="<?php echo esc_attr( $option_name ); ?>"
-		   id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( get_option( $option_name ) ); ?>"/>
+	<input type="password" name="<?php echo esc_attr( $option_name ); ?>" id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( get_option( $option_name ) ); ?>"/>
 	<?php
 }
 
@@ -334,7 +333,7 @@ function xlt_deepl_auth_key_callback_function( $val ) {
  *
  * @return void
  */
-function xlt_deepl_auth_key_field_to_writing_admin_page() {
+function xlt_deepl_auth_key_field_to_writing_admin_page(): void {
 
 	register_setting(
 		'writing',
@@ -366,7 +365,7 @@ add_action( 'admin_menu', 'xlt_deepl_auth_key_field_to_writing_admin_page' );
  *
  * @return string The iframe HTML.
  */
-function xlt_add_shortcode_iframe( $atts ) {
+function xlt_add_shortcode_iframe( array $atts ): string {
 	$defaults = array(
 		'src'         => '',
 		'width'       => '100%',
@@ -410,7 +409,7 @@ add_shortcode( 'iframe', 'xlt_add_shortcode_iframe' );
  *
  * @return void
  */
-function xlt_add_english_fields_settings() {
+function xlt_add_english_fields_settings(): void {
 	register_setting( 'general', 'english_title', 'esc_attr' );
 	register_setting( 'general', 'english_tagline', 'esc_attr' );
 
@@ -423,9 +422,9 @@ function xlt_add_english_fields_settings() {
  *
  * @return void
  */
-function xlt_english_title_field() {
+function xlt_english_title_field(): void {
 	$english_title = get_option( 'english_title', '' );
-	echo '<input aria-describedby="title-english" class="regular-text" type="text" id="english_title" name="english_title" value="' . $english_title . '" />';
+	echo '<input aria-describedby="title-english" class="regular-text" type="text" id="english_title" name="english_title" value="' . esc_attr( $english_title ) . '" />';
 	echo '<p class="description" id="title-english">Website title.</p>';
 }
 
@@ -434,9 +433,9 @@ function xlt_english_title_field() {
  *
  * @return void
  */
-function xlt_english_tagline_field() {
+function xlt_english_tagline_field(): void {
 	$english_tagline = get_option( 'english_tagline', '' );
-	echo '<input aria-describedby="tagline-english" class="regular-text" type="text" id="english_tagline" name="english_tagline" value="' . $english_tagline . '" />';
+	echo '<input aria-describedby="tagline-english" class="regular-text" type="text" id="english_tagline" name="english_tagline" value="' . esc_attr( $english_tagline ) . '" />';
 	echo '<p class="description" id="tagline-english">In a few words, explain what this site is about.</p>';
 }
 
@@ -447,7 +446,7 @@ add_filter( 'admin_init', 'xlt_add_english_fields_settings' );
  *
  * @return string
  */
-function xlt_allowedtags() {
+function xlt_allowedtags(): string {
 	return '<p>,<br>,<em>,<i>,<ul>,<ol>,<li>,<p>,<img>,<video>,<audio>,<figure>,<picture>,<source>';
 }
 
@@ -459,7 +458,7 @@ function xlt_allowedtags() {
  * @return string
  * @throws Exception Exception.
  */
-function xlt_custom_wp_trim_excerpt( $xlt_excerpt ) {
+function xlt_custom_wp_trim_excerpt( string $xlt_excerpt ): string {
 	$raw_excerpt = $xlt_excerpt;
 
 	if ( '' === $xlt_excerpt ) {
@@ -477,10 +476,10 @@ function xlt_custom_wp_trim_excerpt( $xlt_excerpt ) {
 		$xlt_excerpt = strip_tags( $xlt_excerpt, xlt_allowedtags() );
 
 		$excerpt_word_count = 60;
-		$excerpt_length     = apply_filters( 'excerpt_length', $excerpt_word_count );
-		$tokens             = array();
-		$excerpt_output     = '';
-		$count              = 0;
+		apply_filters( 'excerpt_length', $excerpt_word_count );
+		$tokens         = array();
+		$excerpt_output = '';
+		$count          = 0;
 
 		preg_match_all( '/(<[^>]+>|[^<>\s]+)\s*/u', $xlt_excerpt, $tokens );
 
@@ -499,8 +498,8 @@ function xlt_custom_wp_trim_excerpt( $xlt_excerpt ) {
 
 		$xlt_excerpt = str_replace( '<p></p>', '', $xlt_excerpt );
 
-		$excerpt_end  = '...';
-		$excerpt_more = apply_filters( 'excerpt_more', ' ' . $excerpt_end );
+		$excerpt_end = '...';
+		apply_filters( 'excerpt_more', ' ' . $excerpt_end );
 
 		$pos    = strrpos( $xlt_excerpt, '</' );
 		$figure = strrpos( $xlt_excerpt, '</figure>' );
@@ -527,7 +526,7 @@ function xlt_make_it_snow(): void {
 	// TODO: set up option.
 	$snow        = XLT_PLUGIN_PATH . 'assets/js/snow.min.js';
 	$script_snow = xlt_get_file_content( $snow );
-	// echo '<script type="text/javascript">' . $script_snow . '</script>';
+	// echo '<script type="text/javascript">' . $script_snow . '</script>'; .
 }
 
 add_action( 'wp_footer', 'xlt_make_it_snow' );

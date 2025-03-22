@@ -14,11 +14,17 @@ use DeepL\Translator;
 /**
  * Gets absolute url.
  *
- * @return string
+ * @return bool|string
  */
-function get_abs_url() {
+function get_abs_url(): bool|string {
 	if ( isset( $_SERVER['HTTP_HOST'] ) && ! is_admin() ) {
-		return ( isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http' ) . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		$http_host = esc_url_raw( wp_unslash( $_SERVER['HTTP_HOST'] ) );
+		if ( ( '' === $http_host ) && isset( $_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT'] ) ) {
+			// Localhost.
+			$http_host = str_replace( 'http://', '', esc_url_raw( wp_unslash( $_SERVER['SERVER_NAME'] ) ) ) . ':' . str_replace( 'http://', '', esc_url_raw( wp_unslash( $_SERVER['SERVER_PORT'] ) ) );
+		}
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		return ( isset( $_SERVER['HTTPS'] ) && 'on' === esc_url_raw( wp_unslash( $_SERVER['HTTPS'] ) ) ? 'https' : 'http' ) . '://' . $http_host . $request_uri;
 	}
 
 	return false;
@@ -31,7 +37,7 @@ function get_abs_url() {
  *
  * @return array|string
  */
-function get_trans( $element ) {
+function get_trans( string $element ): array|string {
 	$trans_content = '';
 	$auth_key      = get_option( 'deepl_auth_key' );
 
@@ -63,14 +69,14 @@ function get_trans( $element ) {
  *
  * @return string
  */
-function xlt_get_comment_date( $date ) {
+function xlt_get_comment_date( string $date ): string {
 	global $lang;
 
 	if ( 'en' === $lang ) {
-		return date( 'd F Y', strtotime( $date ) ) . ' &ndash; ' . date( 'H:i', strtotime( $date ) );
+		return gmdate( 'd F Y', strtotime( $date ) ) . ' &ndash; ' . gmdate( 'H:i', strtotime( $date ) );
 	}
 
-	return date_i18n( 'd F Y', strtotime( $date ) ) . ' &ndash; ' . date( 'H:i', strtotime( $date ) );
+	return date_i18n( 'd F Y', strtotime( $date ) ) . ' &ndash; ' . gmdate( 'H:i', strtotime( $date ) );
 }
 
 /**
@@ -80,7 +86,7 @@ function xlt_get_comment_date( $date ) {
  *
  * @return string
  */
-function get_title_en( $post_id = 0 ) {
+function get_title_en( int $post_id = 0 ): string {
 
 	if ( 0 === $post_id ) {
 		global $post;
@@ -94,8 +100,7 @@ function get_title_en( $post_id = 0 ) {
 	$post_type = get_post_type( $post_id );
 
 	if ( 'post' === $post_type || 'page' === $post_type || 'film' === $post_type || 'tvseries' === $post_type ) {
-		if ( ! get_post_meta( $post_id, 'title_en', true )
-		     || get_post_meta( $post_id, 'title_en', true ) === '' ) {
+		if ( ! get_post_meta( $post_id, 'title_en', true ) || get_post_meta( $post_id, 'title_en', true ) === '' ) {
 
 			$this_post  = get_post( $post_id );
 			$this_title = get_trans( $this_post->post_title );
@@ -115,7 +120,7 @@ function get_title_en( $post_id = 0 ) {
  * @return string
  * @throws Exception Exception.
  */
-function get_content_en( $post_id = 0 ) {
+function get_content_en( int $post_id = 0 ): string {
 
 	if ( 0 === $post_id ) {
 		global $post;
@@ -153,10 +158,10 @@ function get_content_en( $post_id = 0 ) {
 				);
 
 				if ( isset( $block['blockName'] ) && '' !== $block['blockName'] && in_array(
-						$block['blockName'],
-						$block_types,
-						true
-					) ) {
+					$block['blockName'],
+					$block_types,
+					true
+				) ) {
 
 					$name = $block['blockName'];
 
@@ -176,12 +181,8 @@ function get_content_en( $post_id = 0 ) {
 							$block['innerContent'][0] = $block['innerHTML'];
 							break;
 					}
-
-					$output .= render_block( $block );
-
-				} else {
-					$output .= render_block( $block );
 				}
+				$output .= render_block( $block );
 			}
 
 			$output .= '<!-- Automagically translated. -->';
@@ -190,6 +191,8 @@ function get_content_en( $post_id = 0 ) {
 
 		return get_post_meta( $post_id, 'content_en', true );
 	}
+
+	return '';
 }
 
 /**
@@ -200,7 +203,7 @@ function get_content_en( $post_id = 0 ) {
  * @return string
  * @throws Exception Exception.
  */
-function xlt_trans_code( $code ) {
+function xlt_trans_code( string $code ): string {
 
 	if ( '' === $code ) {
 		$hl = new Highlighter();
@@ -225,9 +228,10 @@ function xlt_trans_code( $code ) {
 
 		$highlighted = $hl->highlightAuto( $code );
 
-		$code            = '<pre class="wp-block-code"><code class="hljs ' . $highlighted->language . '">' . $highlighted->value . '</code></pre>';
-		$code->outertext = apply_filters( 'the_content', $code );
-
+		$code = '<pre class="wp-block-code"><code class="hljs ' . $highlighted->language . '">' . $highlighted->value . '</code></pre>';
+		if ( isset( $code->outertext ) ) {
+			$code->outertext = apply_filters( 'the_content', $code );
+		}
 	}
 
 	return $code;
@@ -240,7 +244,7 @@ function xlt_trans_code( $code ) {
  *
  * @return array
  */
-function xlt_trans_quote( $block ) {
+function xlt_trans_quote( array $block ): array {
 
 	if ( isset( $block['innerBlocks'] ) ) {
 		$i = 0;
@@ -277,7 +281,7 @@ function xlt_trans_quote( $block ) {
  *
  * @return array
  */
-function xlt_trans_list( $block ) {
+function xlt_trans_list( array $block ): array {
 	if ( isset( $block['innerBlocks'] ) ) {
 		$y = 0;
 		foreach ( $block['innerBlocks'] as $inner ) {
@@ -295,7 +299,7 @@ function xlt_trans_list( $block ) {
  *
  * @return string
  */
-function get_lang() {
+function get_lang(): string {
 	$link = get_abs_url();
 
 	$lang = 'it';
@@ -313,7 +317,7 @@ function get_lang() {
  *
  * @return string
  */
-function get_url_trans() {
+function get_url_trans(): string {
 
 	$link     = get_abs_url();
 	$pos      = strpos( $link, '/en/' );
@@ -387,7 +391,7 @@ function xlt_translate_date_month( int|string $the_date, string $format, WP_Post
 
 	global $lang;
 
-	if ( 'en' === $lang ) {
+	if ( 'en' === $lang && '' === $format ) {
 		$datetime = get_the_time( 'm', $post->ID ) . '/01/' . get_the_time( 'Y', $post->ID );
 		return get_the_time( 'd', $post->ID ) . ' ' . gmdate( 'F', strtotime( $datetime ) ) . ' ' . get_the_time( 'Y', $post->ID );
 	}

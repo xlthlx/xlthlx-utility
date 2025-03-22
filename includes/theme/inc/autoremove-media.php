@@ -137,7 +137,6 @@ function xlt_remove_media( int $post_id ): void {
 						}
 						break;
 
-
 					default:
 						wp_delete_attachment( $query->post->ID, true );
 						break;

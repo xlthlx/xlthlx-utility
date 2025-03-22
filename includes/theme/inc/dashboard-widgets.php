@@ -10,7 +10,7 @@
  *
  * @return void
  */
-function xlt_add_dashboard_widgets() {
+function xlt_add_dashboard_widgets(): void {
 	wp_add_dashboard_widget( 'plausible_widget', 'Plausible statistics', 'plausible_widget_callback' );
 	wp_add_dashboard_widget( 'flamingo_widget', 'Messaggi in arrivo', 'flamingo_widget_callback' );
 	wp_add_dashboard_widget( 'latest_comments_widget', 'Ultimi commenti', 'latest_comments_widget_callback' );
@@ -33,7 +33,7 @@ function plausible_widget_callback() {
 
 	<script>
 		window.addEventListener('load', function () {
-			let exclusionState = window.localStorage.plausible_ignore == "true"
+			let exclusionState = window.localStorage.plausible_ignore === "true"
 
 			if ( exclusionState ) {
 				document.getElementById("plausible_not").style.display = "none"
@@ -47,7 +47,7 @@ function plausible_widget_callback() {
 		});
 
 		function toggleExclusion() {
-			let exclusionState = window.localStorage.plausible_ignore == "true"
+			let exclusionState = window.localStorage.plausible_ignore === "true"
 
 			if ( exclusionState ) {
 				delete window.localStorage.plausible_ignore
@@ -70,7 +70,7 @@ function plausible_widget_callback() {
  *
  * @return void
  */
-function flamingo_widget_callback() {
+function flamingo_widget_callback(): void {
 	$the_query = new WP_Query(
 		array(
 			'post_type'      => 'flamingo_inbound',
@@ -100,10 +100,8 @@ function flamingo_widget_callback() {
 				<tr>
 					<td class="subject column-subject has-row-actions column-primary" data-colname="Oggetto">
 						<strong>
-							<a class="row-title"
-							   href="https://xlthlx.com/wp-admin/admin.php?page=flamingo_inbound&amp;post=<?php echo get_the_ID(); ?>&amp;action=edit"
-							   aria-label="Modifica" title="Modifica">
-								<?php echo get_the_title(); ?>
+							<a class="row-title" href="https://xlthlx.com/wp-admin/admin.php?page=flamingo_inbound&amp;post=<?php echo get_the_ID(); ?>&amp;action=edit" aria-label="Modifica" title="Modifica">
+								<?php echo esc_attr( get_the_title() ); ?>
 							</a>
 						</strong>
 					</td>
@@ -125,7 +123,7 @@ function flamingo_widget_callback() {
  *
  * @return void
  */
-function latest_comments_widget_callback() {
+function latest_comments_widget_callback(): void {
 	$args = array(
 		'orderby' => 'comment_date',
 		'order'   => 'DESC',
@@ -152,14 +150,12 @@ function latest_comments_widget_callback() {
 			<tr>
 				<td class="author column-author column-primary" data-colname="Autore">
 					<strong>
-						<a class="row-title"
-						   href="<?php echo get_home_url(); ?>/wp-admin/comment.php?action=editcomment&c=<?php echo $comment->comment_ID; ?>"
-						   aria-label="Modifica" title="Modifica">
-							<?php echo $comment->comment_author; ?>
+						<a class="row-title" href="<?php echo esc_url( get_home_url() ); ?>/wp-admin/comment.php?action=editcomment&c=<?php echo esc_attr( $comment->comment_ID ); ?>" aria-label="Modifica" title="Modifica">
+							<?php echo esc_attr( $comment->comment_author ); ?>
 						</a>
 					</strong>
 				</td>
-				<td class="comment column-comment" data-colname="Commento"><?php echo $comment->comment_content; ?></td>
+				<td class="comment column-comment" data-colname="Commento"><?php echo esc_attr( $comment->comment_content ); ?></td>
 			</tr>
 		<?php } ?>
 		</tbody>

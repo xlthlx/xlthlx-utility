@@ -10,7 +10,7 @@
  *
  * @return void
  */
-function xlt_init_minify_html() {
+function xlt_init_minify_html(): void {
 	if ( ! is_user_logged_in() ) {
 		ob_start( 'xlt_minify_html_output' );
 	}
@@ -25,10 +25,10 @@ if ( ! ( defined( 'WP_CLI' ) && WP_CLI ) && ! is_admin() ) {
  *
  * @param string $buffer The HTML buffer.
  *
- * @return array|string|string[]|void
+ * @return array|string|string[]
  */
-function xlt_minify_html_output( $buffer ) {
-	if ( 0 === strpos( ltrim( $buffer ), '<?xml' ) ) {
+function xlt_minify_html_output( string $buffer ): array|string {
+	if ( str_starts_with( ltrim( $buffer ), '<?xml' ) ) {
 		return ( $buffer );
 	}
 
@@ -76,13 +76,7 @@ function xlt_minify_html_output( $buffer ) {
 					if ( $iii_value ) {
 						$asis .= trim( $iii_value ) . chr( 10 );
 					}
-					if ( strpos(
-						     $iii_value,
-						     '//'
-					     ) !== false && substr(
-						                    trim( $iii_value ),
-						                    - 1
-					                    ) === ';' ) {
+					if ( str_contains( $iii_value, '//' ) && str_ends_with( trim( $iii_value ), ';' ) ) {
 						$asis .= chr( 10 );
 					}
 				}
@@ -107,7 +101,7 @@ function xlt_minify_html_output( $buffer ) {
 					$asis
 				);
 
-			} elseif ( 0 === strpos( $asis, '<style' ) ) {
+			} elseif ( str_starts_with( $asis, '<style' ) ) {
 				$asis = preg_replace(
 					array(
 						'/\>[^\S ]+' . $mod,
@@ -194,21 +188,23 @@ function xlt_minify_html_output( $buffer ) {
 	);
 
 	if ( 0 === stripos(
-			ltrim( $buffer ),
-			'<!doctype html>'
-		) ) {
+		ltrim( $buffer ),
+		'<!doctype html>'
+	) ) {
 		$buffer = str_replace( ' />', '>', $buffer );
 	}
 
-	$buffer = str_replace(
-		array(
-			'https://' . $_SERVER['HTTP_HOST'] . '/',
-			'http://' . $_SERVER['HTTP_HOST'] . '/',
-			'//' . $_SERVER['HTTP_HOST'] . '/',
-		),
-		array( '/', '/', '/' ),
-		$buffer
-	);
+	if ( isset( $_SERVER['HTTP_HOST'] ) ) {
+		$buffer = str_replace(
+			array(
+				'https://' . esc_url_raw( wp_unslash( $_SERVER['HTTP_HOST'] ) ) . '/',
+				'http://' . esc_url_raw( wp_unslash( $_SERVER['HTTP_HOST'] ) ) . '/',
+				'//' . esc_url_raw( wp_unslash( $_SERVER['HTTP_HOST'] ) ) . '/',
+			),
+			array( '/', '/', '/' ),
+			$buffer
+		);
+	}
 
 	$buffer = str_replace(
 		array(

@@ -13,7 +13,7 @@
  *
  * @return array
  */
-function xlt_flamingo_contact_columns( $columns ) {
+function xlt_flamingo_contact_columns( array $columns ): array {
 	$columns['code']   = 'Codice';
 	$columns['lang']   = 'Lingua';
 	$columns['active'] = 'Conferma';
@@ -31,10 +31,10 @@ add_action( 'manage_flamingo_contact_posts_columns', 'xlt_flamingo_contact_colum
  * @param string $column_name Column name.
  * @param int    $post_id Post ID.
  */
-function xlt_print_flamingo_contact_columns( $column_name, $post_id ) {
+function xlt_print_flamingo_contact_columns( string $column_name, int $post_id ): void {
 
 	if ( 'code' === $column_name ) {
-		echo get_post_meta( $post_id, '_code', true );
+		echo esc_attr( get_post_meta( $post_id, '_code', true ) );
 	}
 
 	if ( 'lang' === $column_name ) {
@@ -43,7 +43,7 @@ function xlt_print_flamingo_contact_columns( $column_name, $post_id ) {
 	}
 
 	if ( 'active' === $column_name ) {
-		echo ucfirst( get_post_meta( $post_id, '_active', true ) );
+		echo esc_attr( ucfirst( get_post_meta( $post_id, '_active', true ) ) );
 	}
 }
 
@@ -57,7 +57,7 @@ add_action( 'manage_flamingo_contact_posts_custom_column', 'xlt_print_flamingo_c
  *
  * @return array
  */
-function xlt_change_post_type_args( $args, $post_type ) {
+function xlt_change_post_type_args( array $args, string $post_type ): array {
 
 	if ( 'flamingo_contact' === $post_type ) {
 		$args['query_var']               = true;
@@ -84,7 +84,7 @@ add_filter( 'register_post_type_args', 'xlt_change_post_type_args', 10, 2 );
  *
  * @return array
  */
-function xlt_change_taxonomy_args( $args, $taxonomy ): array {
+function xlt_change_taxonomy_args( array $args, string $taxonomy ): array {
 
 	if ( 'flamingo_contact_tag' === $taxonomy ) {
 		$args['query_var']               = true;

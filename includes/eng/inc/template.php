@@ -9,8 +9,10 @@
  * Save comment meta lang.
  *
  * @param int $comment_id The comment ID.
+ *
+ * @return void
  */
-function xlt_save_comment_lang( $comment_id ) {
+function xlt_save_comment_lang( int $comment_id ): void {
 	// @codingStandardsIgnoreStart
 	update_comment_meta( $comment_id, 'comment_lang', $_POST['comment_lang'] );
 	// @codingStandardsIgnoreEnd
@@ -25,7 +27,7 @@ add_action( 'comment_post', 'xlt_save_comment_lang' );
  *
  * @return array
  */
-function xlt_query_vars_lang( $vars ) {
+function xlt_query_vars_lang( array $vars ): array {
 	$vars[] = 'en';
 
 	return $vars;
@@ -40,7 +42,7 @@ add_filter( 'query_vars', 'xlt_query_vars_lang' );
  *
  * @return string
  */
-function xlt_template_redirect( $template ) {
+function xlt_template_redirect( string $template ): string {
 	global $wp_query;
 
 	if ( ! isset( $wp_query->query_vars['en'] ) ) {
@@ -104,7 +106,7 @@ add_filter( 'template_include', 'xlt_template_redirect' );
 /**
  * Add rewrite endpoints.
  */
-function xlt_rewrite_tags_lang() {
+function xlt_rewrite_tags_lang(): void {
 	add_rewrite_endpoint( 'en', EP_ALL, 'en' );
 	add_rewrite_endpoint( 'search', EP_SEARCH, 's' );
 }
@@ -119,7 +121,7 @@ add_action( 'init', 'xlt_rewrite_tags_lang' );
  *
  * @return string
  */
-function xlt_set_title_en( $title, $id ) {
+function xlt_set_title_en( string $title, int $id ): string {
 	global $lang;
 
 	if ( is_admin() ) {
@@ -153,7 +155,7 @@ add_filter( 'the_title', 'xlt_set_title_en', 10, 2 );
  *
  * @return WP_Term
  */
-function xlt_filter_term_name( $term, $taxonomy ) {
+function xlt_filter_term_name( WP_Term $term, string $taxonomy ): WP_Term {
 
 	global $lang;
 
@@ -188,13 +190,9 @@ add_filter( 'get_term', 'xlt_filter_term_name', 10, 2 );
  *
  * @return string
  */
-function xlt_term_link_filter( $term_link, $term, $taxonomy ) {
+function xlt_term_link_filter( string $term_link, WP_Term $term, string $taxonomy ): string {
 
 	global $lang;
-
-	if ( null === $term ) {
-		return $term_link;
-	}
 
 	if ( is_admin() ) {
 		return $term_link;
@@ -222,13 +220,9 @@ add_filter( 'term_link', 'xlt_term_link_filter', 10, 3 );
  *
  * @return string
  */
-function xlt_search_link_filter( $link, $search ) {
+function xlt_search_link_filter( string $link, string $search ): string {
 
 	global $lang;
-
-	if ( null === $search ) {
-		return $link;
-	}
 
 	if ( is_admin() ) {
 		return $link;
@@ -250,7 +244,7 @@ add_filter( 'search_link', 'xlt_search_link_filter', 10, 2 );
  *
  * @return array
  */
-function xlt_set_title_en_pages( $pages ) {
+function xlt_set_title_en_pages( array $pages ): array {
 
 	global $lang;
 
@@ -268,12 +262,12 @@ add_filter( 'get_pages', 'xlt_set_title_en_pages' );
 /**
  * Filters the permalink for page/post.
  *
- * @param string $link The page's permalink.
- * @param int    $post_id The ID of the page.
+ * @param string     $link The page's permalink.
+ * @param int|object $post_id The ID of the page or the post object.
  *
  * @return string
  */
-function xlt_set_url_en( $link, $post_id ) {
+function xlt_set_url_en( string $link, int|object $post_id ): string {
 
 	global $lang;
 
@@ -303,7 +297,7 @@ add_filter( 'post_link', 'xlt_set_url_en', 10, 2 );
  *
  * @return string
  */
-function xlt_change_widget_title( $title, $instance ) {
+function xlt_change_widget_title( string $title, array $instance ): string {
 
 	global $lang;
 
@@ -327,7 +321,7 @@ add_filter( 'widget_title', 'xlt_change_widget_title', 10, 2 );
  *
  * @return string
  */
-function xlt_filter_next_post_link( $link ) {
+function xlt_filter_next_post_link( string $link ): string {
 
 	global $lang;
 	$title = 'Articolo successivo';
@@ -352,7 +346,7 @@ add_filter( 'next_post_link', 'xlt_filter_next_post_link' );
  *
  * @return string
  */
-function xlt_filter_previous_post_link( $link ) {
+function xlt_filter_previous_post_link( string $link ): string {
 
 	global $lang;
 	$title = 'Articolo precedente';
@@ -377,7 +371,7 @@ add_filter( 'previous_post_link', 'xlt_filter_previous_post_link' );
  *
  * @return string
  */
-function xlt_en_title( $title ) {
+function xlt_en_title( string $title ): string {
 
 	global $lang, $post;
 
@@ -426,7 +420,7 @@ add_filter( 'slim_seo_meta_title', 'xlt_en_title' );
  * @return string
  * @throws Exception Exception.
  */
-function xlt_en_description( $description ) {
+function xlt_en_description( string $description ): string {
 
 	global $lang;
 
@@ -457,7 +451,7 @@ add_filter( 'slim_seo_meta_description', 'xlt_en_description' );
  *
  * @return string
  */
-function xlt_search_join_post_meta( $join ) {
+function xlt_search_join_post_meta( string $join ): string {
 	global $wpdb;
 
 	if ( is_search() ) {
@@ -476,12 +470,12 @@ add_filter( 'posts_join', 'xlt_search_join_post_meta' );
  *
  * @return string
  */
-function xlt_search_where_post_meta( $where ) {
+function xlt_search_where_post_meta( string $where ): string {
 	global $wpdb;
 
 	if ( is_search() ) {
 		$where = preg_replace(
-			'/\(\s*' . $wpdb->posts . ".post_title\s+LIKE\s*(\'[^\']+\')\s*\)/",
+			'/\(\s*' . $wpdb->posts . ".post_title\s+LIKE\s*('[^']+')\s*\)/",
 			'(' . $wpdb->posts . '.post_title LIKE $1) OR (' . $wpdb->postmeta . '.meta_value LIKE $1)',
 			$where
 		);
@@ -499,7 +493,7 @@ add_filter( 'posts_where', 'xlt_search_where_post_meta' );
  *
  * @return string
  */
-function xlt_search_distinct( $distinct ) {
+function xlt_search_distinct( string $distinct ): string {
 
 	if ( is_search() ) {
 		return 'DISTINCT';
@@ -513,7 +507,7 @@ add_filter( 'posts_distinct', 'xlt_search_distinct' );
 /**
  * Pretty permalink for search.
  */
-function xlt_search_url_rewrite() {
+function xlt_search_url_rewrite(): void {
 	global $wp_rewrite;
 	if ( ! isset( $wp_rewrite ) || ! is_object( $wp_rewrite ) || ! $wp_rewrite->get_search_permastruct() ) {
 		return;
@@ -521,9 +515,9 @@ function xlt_search_url_rewrite() {
 
 	$search_base = $wp_rewrite->search_base;
 	$needle      = '/' . $search_base . '/';
-	$uri         = $_SERVER['REQUEST_URI'];
+	$uri         = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 
-	if ( strpos( $uri, $needle ) === false && strpos( $uri, '&lang=en' ) !== false ) {
+	if ( ! str_contains( $uri, $needle ) && str_contains( $uri, '&lang=en' ) ) {
 
 		$search = rawurlencode( get_query_var( 's' ) );
 		$search = str_replace( '%2F', '/', $search );
@@ -532,7 +526,7 @@ function xlt_search_url_rewrite() {
 		exit();
 	}
 
-	if ( is_search() && strpos( $uri, $needle ) === false && strpos( $uri, '&' ) === false ) {
+	if ( is_search() && ! str_contains( $uri, $needle ) && ! str_contains( $uri, '&' ) ) {
 		wp_safe_redirect( get_search_link() );
 		exit();
 	}
@@ -546,7 +540,7 @@ add_action( 'template_redirect', 'xlt_search_url_rewrite' );
  *
  * @param object $query The WP_Query instance.
  */
-function xlt_exclude_pages_from_search_results( $query ) {
+function xlt_exclude_pages_from_search_results( object $query ): void {
 	if ( $query->is_search() && ! is_admin() ) {
 		$query->set( 'post_type', array( 'post' ) );
 	}
@@ -558,7 +552,7 @@ add_action( 'pre_get_posts', 'xlt_exclude_pages_from_search_results' );
 /**
  * Adds rewrite rule for English paginated search.
  */
-function xlt_rewrite_search_pages_en() {
+function xlt_rewrite_search_pages_en(): void {
 	add_rewrite_rule(
 		'^search/([^/]+)/en/page/([0-9]+)/?$',
 		'index.php?s=$matches[1]&lang=en&paged=$matches[2]',

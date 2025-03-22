@@ -12,7 +12,7 @@
  *
  * @return array $columns
  */
-function xlt_page_column_views( $columns ) {
+function xlt_page_column_views( array $columns ): array {
 	unset( $columns['comments'], $columns['date'] );
 
 	return array_merge(
@@ -32,7 +32,7 @@ function xlt_page_column_views( $columns ) {
  * @param string $column_name The column name.
  * @param int    $id The post ID.
  */
-function xlt_page_custom_column_views( $column_name, $id ) {
+function xlt_page_custom_column_views( string $column_name, int $id ): void {
 	if ( 'page-layout' === $column_name ) {
 		$set_template = get_post_meta(
 			get_the_ID(),
@@ -49,13 +49,13 @@ function xlt_page_custom_column_views( $column_name, $id ) {
 			}
 		endforeach;
 
-		echo $set_template;
+		echo esc_attr( $set_template );
 	}
 	if ( 'modified' === $column_name ) {
-		echo ucfirst( get_the_modified_time( 'd/m/Y', $id ) ) . ' alle ' . get_the_modified_time( 'H:i', $id );
+		echo esc_attr( ucfirst( get_the_modified_time( 'd/m/Y', $id ) ) . ' alle ' . get_the_modified_time( 'H:i', $id ) );
 	}
 	if ( 'date' === $column_name ) {
-		echo get_the_modified_time( 'D, d M Y H:i:s', $id );
+		echo esc_attr( get_the_modified_time( 'D, d M Y H:i:s', $id ) );
 	}
 }
 

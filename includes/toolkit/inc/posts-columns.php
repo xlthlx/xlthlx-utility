@@ -12,7 +12,7 @@
  *
  * @return array
  */
-function xlt_posts_columns( $columns ) {
+function xlt_posts_columns( array $columns ): array {
 	$post_type = get_post_type();
 	if ( 'post' === $post_type ) {
 		unset( $columns['date'] );
@@ -36,12 +36,12 @@ function xlt_posts_columns( $columns ) {
  * @param string $column_name The column name.
  * @param int    $id The post ID.
  */
-function xlt_posts_custom_columns( $column_name, $id ) {
+function xlt_posts_custom_columns( string $column_name, int $id ): void {
 	if ( 'thumbs' === $column_name ) {
 		echo get_the_post_thumbnail( $id, 'thumbnail' );
 	}
 	if ( 'modified' === $column_name ) {
-		echo ucfirst( get_the_modified_time( 'd/m/Y', $id ) ) . ' alle ' . get_the_modified_time( 'H:i', $id );
+		echo esc_attr( ucfirst( get_the_modified_time( 'd/m/Y', $id ) ) . ' alle ' . get_the_modified_time( 'H:i', $id ) );
 	}
 	if ( 'date' === $column_name ) {
 		echo get_the_date( $id );
