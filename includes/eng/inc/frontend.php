@@ -391,7 +391,7 @@ function xlt_translate_date_month( int|string $the_date, string $format, WP_Post
 
 	global $lang;
 
-	if ( 'en' === $lang && !isset( $format ) ) {
+	if ( 'en' === $lang && ( 'Y' !== $format && 'm' !== $format ) ) {
 		$datetime = get_the_time( 'm', $post->ID ) . '/01/' . get_the_time( 'Y', $post->ID );
 		return get_the_time( 'd', $post->ID ) . ' ' . gmdate( 'F', strtotime( $datetime ) ) . ' ' . get_the_time( 'Y', $post->ID );
 	}
