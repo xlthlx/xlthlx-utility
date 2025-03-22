@@ -395,8 +395,6 @@ function xlt_translate_date_month( int|string $the_date, string $format, WP_Post
 		$datetime = get_the_time( 'm', $post->ID ) . '/01/' . get_the_time( 'Y', $post->ID );
 		return get_the_time( 'd', $post->ID ) . ' ' . gmdate( 'F', strtotime( $datetime ) ) . ' ' . get_the_time( 'Y', $post->ID );
 	}
-
-	return $the_date;
 }
 
 add_filter( 'get_the_date', 'xlt_translate_date_month', 10, 3 );
