@@ -587,7 +587,7 @@ if ( ! function_exists( 'xlt_get_years' ) ) {
 
 			while ( $years_query->have_posts() ) {
 				$years_query->the_post();
-				$years[ get_the_date( 'Y' ) ] = get_the_date( 'Y' );
+				$years[ get_the_time( 'Y' ) ] = get_the_time( 'Y' );
 			}
 
 			wp_reset_postdata();
@@ -633,7 +633,7 @@ if ( ! function_exists( 'xlt_get_months' ) ) {
 
 			while ( $months_query->have_posts() ) {
 				$months_query->the_post();
-				$months[ get_the_date( 'm' ) ] = get_the_date( 'm' );
+				$months[ get_the_time( 'm' ) ] = get_the_time( 'm' );
 			}
 
 			wp_reset_postdata();
