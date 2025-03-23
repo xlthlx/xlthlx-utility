@@ -644,6 +644,8 @@ if ( ! function_exists( 'xlt_get_months' ) ) {
 			$url .= 'en/';
 		}
 
+		ksort( $months );
+
 		foreach ( $months as $month ) {
 			$l_month    = sprintf( '%02d', $month );
 			$datetime   = $year . '-' . $l_month . '-01';
