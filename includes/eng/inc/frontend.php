@@ -18,7 +18,7 @@ use DeepL\Translator;
  */
 function get_abs_url(): bool|string {
 	if ( isset( $_SERVER['HTTP_HOST'] ) && ! is_admin() ) {
-		$http_host = esc_url_raw( wp_unslash( $_SERVER['HTTP_HOST'] ) );
+		$http_host = str_replace( 'http://', 'https://', esc_url_raw( wp_unslash( $_SERVER['HTTP_HOST'] ) ) );
 		if ( ( '' === $http_host ) && isset( $_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT'] ) ) {
 			// Localhost.
 			$http_host = str_replace( 'http://', '', esc_url_raw( wp_unslash( $_SERVER['SERVER_NAME'] ) ) ) . ':' . str_replace( 'http://', '', esc_url_raw( wp_unslash( $_SERVER['SERVER_PORT'] ) ) );
