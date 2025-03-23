@@ -1,14 +1,20 @@
 {
   "core": null,
   "themes": [
-    "https://downloads.wordpress.org/theme/twentytwentyfive.zip",
-    "https://github.com/xlthlx/xlthlx.com/archive/refs/heads/main.zip"
+    "https://downloads.wordpress.org/theme/twentytwentyfive.zip"
   ],
   "plugins": [
     ".",
-    "https://downloads.wordpress.org/plugin/query-monitor.zip",
+    "https://downloads.wordpress.org/plugin/akismet.zip",
+    "https://downloads.wordpress.org/plugin/comments-subscriber.zip",
     "https://downloads.wordpress.org/plugin/contact-form-7.zip",
-    "https://downloads.wordpress.org/plugin/flamingo.zip"
+    "https://downloads.wordpress.org/plugin/eazy-cf-catpcha.zip",
+    "https://downloads.wordpress.org/plugin/flamingo.zip",
+    "https://downloads.wordpress.org/plugin/plausible-analytics.zip",
+    "https://downloads.wordpress.org/plugin/query-monitor.zip",
+    "https://downloads.wordpress.org/plugin/simple-auto-poster-for-bluesky.zip",
+    "https://downloads.wordpress.org/plugin/slim-seo.zip",
+    "https://downloads.wordpress.org/plugin/wp-sweep.zip"
   ],
   "mappings": {
     "wp-content": "./wp-content"
