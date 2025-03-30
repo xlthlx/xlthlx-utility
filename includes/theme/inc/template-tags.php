@@ -697,7 +697,7 @@ if ( ! function_exists( 'xlt_get_months' ) ) {
 		$array  = array();
 		$months = array();
 
-		$months_query = xlt_get_all_posts();
+		$months_query = xlt_get_all_posts( $year );
 
 		if ( $months_query->have_posts() ) {
 
