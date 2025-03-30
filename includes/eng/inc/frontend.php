@@ -21,7 +21,7 @@ function get_abs_url(): bool|string {
 		$http_host = str_replace( 'http://', 'https://', esc_url_raw( wp_unslash( $_SERVER['HTTP_HOST'] ) ) );
 		if ( ( '' === $http_host ) && isset( $_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT'] ) ) {
 			// Localhost.
-			$http_host = str_replace( 'http://', '', esc_url_raw( wp_unslash( $_SERVER['SERVER_NAME'] ) ) ) . ':' . str_replace( 'http://', '', esc_url_raw( wp_unslash( $_SERVER['SERVER_PORT'] ) ) );
+			$http_host = get_home_url();
 		}
 		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 		return $http_host . $request_uri;

@@ -354,6 +354,88 @@ if ( ! function_exists( 'xlt_get_url_from_href' ) ) {
 	}
 }
 
+if ( ! function_exists( 'xlt_get_menu' ) ) {
+
+	/**
+	 * Returns an array of any given $menu name.
+	 *
+	 * @param int|string $menu The menu name.
+	 *
+	 * @return array
+	 */
+	function xlt_get_menu( int|string $menu ): array {
+		$menu_list = array();
+
+		$menu_items = wp_get_nav_menu_items( $menu );
+
+		if ( $menu_items ) {
+
+			$bool = false;
+
+			$i = 0;
+			foreach ( $menu_items as $menu_item ) {
+				if ( 0 === (int) $menu_item->menu_item_parent ) {
+
+					$parent     = $menu_item->ID;
+					$menu_array = array();
+					$y          = 0;
+
+					foreach ( $menu_items as $submenu ) {
+						if ( isset( $submenu ) && (int) $submenu->menu_item_parent === (int) $parent ) {
+							$bool       = true;
+							$menu_array = xlt_get_arr( $submenu, $menu_array, $y );
+							$y ++;
+						}
+					}
+
+					$menu_list = xlt_get_arr( $menu_item, $menu_list, $i );
+
+					if ( true === $bool && count( $menu_array ) > 0 ) {
+						$menu_list[ $i ]['submenu'] = $menu_array;
+					}
+					$i ++;
+				}
+			}
+		}
+
+		return $menu_list;
+	}
+}
+
+if ( ! function_exists( 'xlt_print_menu' ) ) {
+
+	/**
+	 * Prints any given $menu name.
+	 *
+	 * @param int|string $menu The menu name.
+	 *
+	 * @return void
+	 */
+	function xlt_print_menu( int|string $menu ): void {
+
+		$menu_items = xlt_get_menu( $menu );
+
+		if ( ! empty( $menu_items ) ) {
+			echo '<ul>';
+			foreach ( $menu_items as $menu_item ) {
+				if ( $menu_item['url'] ) { ?>
+					<li class="xlt-inline">
+						<a <?php echo esc_attr( $menu_item['target'] ); ?>
+								href="<?php echo esc_url( $menu_item['url'] ); ?>"
+								title="<?php echo esc_attr( $menu_item['title'] ); ?>">
+							<?php echo esc_attr( $menu_item['title'] ); ?>
+						</a>
+					</li>
+				<?php } else { ?>
+					<?php
+					echo esc_attr( $menu_item['title'] );
+				}
+			}
+			echo '</ul>';
+		}
+	}
+}
+
 if ( ! function_exists( 'xlt_get_menu_items' ) ) {
 	/**
 	 * Get a menu as array from location.
@@ -372,36 +454,7 @@ if ( ! function_exists( 'xlt_get_menu_items' ) ) {
 			$menu = get_term( $locations[ $theme_location ], 'nav_menu' );
 			if ( null !== $menu && ! is_wp_error( $menu ) ) {
 
-				$menu_items = wp_get_nav_menu_items( $menu->term_id );
-				if ( $menu_items ) {
-
-					$bool = false;
-
-					$i = 0;
-					foreach ( $menu_items as $menu_item ) {
-						if ( 0 === (int) $menu_item->menu_item_parent ) {
-
-							$parent     = $menu_item->ID;
-							$menu_array = array();
-							$y          = 0;
-
-							foreach ( $menu_items as $submenu ) {
-								if ( isset( $submenu ) && (int) $submenu->menu_item_parent === (int) $parent ) {
-									$bool       = true;
-									$menu_array = xlt_get_arr( $submenu, $menu_array, $y );
-									$y ++;
-								}
-							}
-
-							$menu_list = xlt_get_arr( $menu_item, $menu_list, $i );
-
-							if ( true === $bool && count( $menu_array ) > 0 ) {
-								$menu_list[ $i ]['submenu'] = $menu_array;
-							}
-							$i ++;
-						}
-					}
-				}
+				$menu_list = xlt_get_menu( $menu->term_id );
 			}
 		}
 
@@ -555,6 +608,29 @@ if ( ! function_exists( 'xlt_get_the_terms' ) ) {
 	}
 }
 
+if ( ! function_exists( 'xlt_get_all_posts' ) ) {
+	/**
+	 * Returns an object with all published posts.
+	 *
+	 * @return WP_Query
+	 */
+	function xlt_get_all_posts(): WP_Query {
+		$args = array(
+			'post_status'            => array( 'publish' ),
+			'order'                  => 'DESC',
+			'orderby'                => 'date',
+			'nopaging'               => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+			'no_found_rows'          => true,
+			'cache_results'          => true,
+		);
+
+		return new WP_Query( $args );
+
+	}
+}
+
 if ( ! function_exists( 'xlt_get_years' ) ) {
 	/**
 	 * Returns a list of years excluding $actual_year.
@@ -574,14 +650,7 @@ if ( ! function_exists( 'xlt_get_years' ) ) {
 			$url .= 'en/';
 		}
 
-		$args = array(
-			'post_status' => array( 'publish' ),
-			'order'       => 'DESC',
-			'orderby'     => 'date',
-			'nopaging'    => true,
-		);
-
-		$years_query = new WP_Query( $args );
+		$years_query = xlt_get_all_posts();
 
 		if ( $years_query->have_posts() ) {
 
@@ -620,14 +689,7 @@ if ( ! function_exists( 'xlt_get_months' ) ) {
 		$array  = array();
 		$months = array();
 
-		$args = array(
-			'post_status' => array( 'publish' ),
-			'order'       => 'DESC',
-			'orderby'     => 'date',
-			'nopaging'    => true,
-		);
-
-		$months_query = new WP_Query( $args );
+		$months_query = xlt_get_all_posts();
 
 		if ( $months_query->have_posts() ) {
 
@@ -781,7 +843,8 @@ if ( ! function_exists( 'xlt_get_switcher' ) ) {
 	function xlt_get_switcher(): void {
 		global $lang;
 
-		if ( 'en' === $lang ) { ?>
+		if ( 'en' === $lang ) {
+			?>
 			<a href="<?php echo esc_url( get_url_trans() ); ?>" class="svg-btn" title="Italiano">Italiano</a>&nbsp;&mdash;&nbsp;
 			<span>English</span>
 		<?php } else { ?>
