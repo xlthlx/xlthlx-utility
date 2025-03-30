@@ -612,9 +612,11 @@ if ( ! function_exists( 'xlt_get_all_posts' ) ) {
 	/**
 	 * Returns an object with all published posts.
 	 *
+	 * @param string|null $year The Year.
+	 *
 	 * @return WP_Query
 	 */
-	function xlt_get_all_posts(): WP_Query {
+	function xlt_get_all_posts( string $year = null ): WP_Query {
 		$args = array(
 			'post_status'            => array( 'publish' ),
 			'order'                  => 'DESC',
@@ -625,6 +627,12 @@ if ( ! function_exists( 'xlt_get_all_posts' ) ) {
 			'no_found_rows'          => true,
 			'cache_results'          => true,
 		);
+
+		if ( null !== $year ) {
+			$args['date_query'] = array(
+				array( 'year' => $year ),
+			);
+		}
 
 		return new WP_Query( $args );
 
