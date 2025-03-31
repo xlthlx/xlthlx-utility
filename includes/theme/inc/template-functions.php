@@ -236,8 +236,6 @@ function xlt_hide_seo_columns( array $columns ): array {
 add_filter( 'manage_page_posts_columns', 'xlt_hide_seo_columns', 20 );
 add_filter( 'manage_post_posts_columns', 'xlt_hide_seo_columns', 20 );
 add_filter( 'manage_edit-category_columns', 'xlt_hide_seo_columns', 20 );
-add_filter( 'manage_film_posts_columns', 'xlt_hide_seo_columns', 20 );
-add_filter( 'manage_tvseries_posts_columns', 'xlt_hide_seo_columns', 20 );
 
 /**
  * Add column Description.
@@ -335,15 +333,41 @@ function xlt_deepl_auth_key_callback_function( array $val ): void {
 }
 
 /**
- * Add DeepL Auth Key to Writing Settings Admin.
+ * Callback function for Make it snow field.
+ *
+ * @param array $val Field Options.
  *
  * @return void
  */
-function xlt_deepl_auth_key_field_to_writing_admin_page(): void {
+function xlt_make_it_snow_callback_function( array $val ): void {
+	$id          = $val['id'];
+	$option_name = $val['option_name'];
+	?>
+	<select name="<?php echo esc_attr( $option_name ); ?>" id="<?php echo esc_attr( $id ); ?>">
+		<option value="" <?php selected( get_option( $option_name ), '' ); ?>>No</option>
+		<option value="yes" <?php selected( get_option( $option_name ), 'yes' ); ?>>Yes</option>
+	</select>
+	<?php
+}
+
+/**
+ * Add fields to Writing Settings Admin.
+ *
+ * @return void
+ */
+function xlt_add_fields_to_writing_admin_page(): void {
 
 	register_setting(
 		'writing',
 		'deepl_auth_key',
+		array(
+			'show_in_rest' => true,
+		)
+	);
+
+	register_setting(
+		'writing',
+		'make_it_snow',
 		array(
 			'show_in_rest' => true,
 		)
@@ -360,9 +384,21 @@ function xlt_deepl_auth_key_field_to_writing_admin_page(): void {
 			'option_name' => 'deepl_auth_key',
 		)
 	);
+
+	add_settings_field(
+		'make_it_snow_settings',
+		'Make it snow',
+		'xlt_make_it_snow_callback_function',
+		'writing',
+		'default',
+		array(
+			'id'          => 'make_it_snow',
+			'option_name' => 'make_it_snow',
+		)
+	);
 }
 
-add_action( 'admin_menu', 'xlt_deepl_auth_key_field_to_writing_admin_page' );
+add_action( 'admin_menu', 'xlt_add_fields_to_writing_admin_page' );
 
 /**
  * Iframe shortcode.
@@ -529,10 +565,14 @@ add_filter( 'get_the_excerpt', 'xlt_custom_wp_trim_excerpt' );
  * @return void
  */
 function xlt_make_it_snow(): void {
-	// TODO: set up option.
-	$snow        = XLT_PLUGIN_PATH . 'assets/js/snow.min.js';
-	$script_snow = xlt_get_file_content( $snow );
-	// echo '<script type="text/javascript">' . $script_snow . '</script>'; .
+	$make_it_snow = get_option( 'make_it_snow' );
+	if ( 'yes' === $make_it_snow ) {
+		$snow        = XLT_PLUGIN_PATH . 'includes/theme/js/snow.min.js';
+		$script_snow = xlt_get_file_content( $snow );
+		// @codingStandardsIgnoreStart
+		echo '<script type="text/javascript">' . $script_snow . '</script>';
+		// @codingStandardsIgnoreEnd
+	}
 }
 
 add_action( 'wp_footer', 'xlt_make_it_snow' );

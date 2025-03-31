@@ -15,7 +15,7 @@ function xlt_add_metabox(): void {
 		array(
 			'id'           => 'group_en',
 			'title'        => 'English',
-			'object_types' => array( 'post', 'page', 'film', 'tvseries' ),
+			'object_types' => array( 'post', 'page' ),
 			'context'      => 'normal',
 			'priority'     => 'high',
 		)
