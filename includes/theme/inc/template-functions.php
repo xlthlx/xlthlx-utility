@@ -295,12 +295,19 @@ add_action( 'load-link-manager.php', 'xlt_setup_columns' );
 function xlt_en_toolbar_link( object $wp_admin_bar ): void {
 
 	global $pagenow;
+	$href = get_permalink( get_query_var( 'post' ) );
+
+	if ( str_contains( $href, '?p=' ) ) {
+		$href = str_replace( get_home_url() . '/', get_home_url() . '/en/', $href );
+	} else {
+		$href .= 'en/';
+	}
 
 	if ( 'post.php' === $pagenow && is_admin() ) {
 		$args = array(
 			'id'    => 'view-english',
 			'title' => 'Visualizza articolo in Inglese',
-			'href'  => get_permalink( get_query_var( 'post' ) ) . 'en/',
+			'href'  => $href,
 			'meta'  => array(
 				'class' => 'ab-item',
 				'title' => 'Visualizza articolo in Inglese',
