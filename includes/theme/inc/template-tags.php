@@ -672,13 +672,13 @@ if ( ! function_exists( 'xlt_get_years' ) ) {
 
 		foreach ( $years as $year ) {
 			if ( ( isset( $actual_year ) ) && $year === $actual_year ) {
-				$array[] = '<strong>' . esc_attr( $year ) . '</strong>';
+				$array[] = '<li class="xlt-inline"><strong>' . esc_attr( $year ) . '</strong></li>';
 			} else {
-				$array[] = '<a href="' . home_url( '/' ) . esc_attr( $year ) . esc_attr( $url ) . '">' . esc_attr( $year ) . '</a>';
+				$array[] = '<li class="xlt-inline"><a href="' . home_url( '/' ) . esc_attr( $year ) . esc_attr( $url ) . '">' . esc_attr( $year ) . '</a></li>';
 			}
 		}
 
-		echo wp_kses( implode( ' ', $array ), 'post' );
+		echo '<ul>' . wp_kses( implode( ' ', $array ), 'post' ) . '</ul>';
 	}
 }
 
@@ -722,13 +722,13 @@ if ( ! function_exists( 'xlt_get_months' ) ) {
 			$month_name = ( 'en' === $lang ) ? gmdate( 'F', strtotime( $datetime ) ) : date_i18n( 'F', strtotime( $datetime ) );
 
 			if ( ( isset( $actual_month ) ) && $actual_month === $month ) {
-				$array[] = '<strong>' . $month_name . '</strong>';
+				$array[] = '<li class="xlt-inline"><strong>' . $month_name . '</strong></li>';
 			} else {
-				$array[] = '<a href="' . home_url( '/' ) . $year . '/' . $l_month . $url . '">' . $month_name . '</a>';
+				$array[] = '<li class="xlt-inline"><a href="' . home_url( '/' ) . $year . '/' . $l_month . $url . '">' . $month_name . '</a></li>';
 			}
 		}
 
-		echo wp_kses( implode( ' ', $array ), 'post' );
+		echo '<ul>' . wp_kses( implode( ' ', $array ), 'post' ) . '</ul>';
 	}
 }
 
