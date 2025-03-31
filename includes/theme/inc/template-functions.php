@@ -330,8 +330,7 @@ function xlt_deepl_auth_key_callback_function( array $val ): void {
 	$id          = $val['id'];
 	$option_name = $val['option_name'];
 	?>
-	<label for="<?php echo esc_attr( $id ); ?>">Auth Key</label>
-	<input type="password" name="<?php echo esc_attr( $option_name ); ?>" id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( get_option( $option_name ) ); ?>"/>
+	<input class="postform" type="password" name="<?php echo esc_attr( $option_name ); ?>" id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( get_option( $option_name ) ); ?>"/>
 	<?php
 }
 
