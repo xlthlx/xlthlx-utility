@@ -351,6 +351,21 @@ function xlt_make_it_snow_callback_function( array $val ): void {
 }
 
 /**
+ * Callback function for Login path field.
+ *
+ * @param array $val Field Options.
+ *
+ * @return void
+ */
+function xlt_login_path_callback_function( array $val ): void {
+	$id          = $val['id'];
+	$option_name = $val['option_name'];
+	?>
+	<input class="postform" type="text" name="<?php echo esc_attr( $option_name ); ?>" id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( get_option( $option_name ) ); ?>"/>
+	<?php
+}
+
+/**
  * Add fields to Writing Settings Admin.
  *
  * @return void
@@ -368,6 +383,14 @@ function xlt_add_fields_to_writing_admin_page(): void {
 	register_setting(
 		'writing',
 		'make_it_snow',
+		array(
+			'show_in_rest' => true,
+		)
+	);
+
+	register_setting(
+		'writing',
+		'xlt_login_path',
 		array(
 			'show_in_rest' => true,
 		)
@@ -394,6 +417,18 @@ function xlt_add_fields_to_writing_admin_page(): void {
 		array(
 			'id'          => 'make_it_snow',
 			'option_name' => 'make_it_snow',
+		)
+	);
+
+	add_settings_field(
+		'xlt_login_path_settings',
+		'Login url',
+		'xlt_login_path_callback_function',
+		'writing',
+		'default',
+		array(
+			'id'          => 'xlt_login_path',
+			'option_name' => 'xlt_login_path',
 		)
 	);
 }
