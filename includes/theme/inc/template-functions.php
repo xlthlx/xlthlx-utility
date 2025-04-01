@@ -208,7 +208,7 @@ function xlt_admin_color_scheme(): void {
 	wp_admin_css_color(
 		'xlthlx',
 		__( 'Xlthlx', 'xlthlx' ),
-		XLT_PLUGIN_PATH . 'includes/theme/css/color-scheme.min.css',
+		XLT_PLUGIN_URL . 'includes/theme/css/color-scheme.min.css',
 		array( '#1e2327', '#fff', '#92285e', '#6667ab' ),
 		array(
 			'base'    => '#ffffff',
