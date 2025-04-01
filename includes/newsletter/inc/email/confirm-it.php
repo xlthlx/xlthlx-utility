@@ -1,5 +1,4 @@
-<?php // @codingStandardsIgnoreStart
-global $site_title, $email, $code; ?>
+<?php // @codingStandardsIgnoreStart ?>
 <html lang="it" style="margin:0;padding:0">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
