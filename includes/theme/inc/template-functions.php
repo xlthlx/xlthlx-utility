@@ -611,3 +611,16 @@ function xlt_make_it_snow(): void {
 }
 
 add_action( 'wp_footer', 'xlt_make_it_snow' );
+
+/**
+ * Change the Feed RSS text for Slim SEO.
+ *
+ * @param string $text The Feed RSS text for Slim SEO.
+ *
+ * @return string
+ */
+function xlt_change_rss_feed_text( string $text ): string {
+	return 'Continua a leggere &raquo;';
+}
+
+add_filter( 'slim_seo_feed_text', 'xlt_change_rss_feed_text' );

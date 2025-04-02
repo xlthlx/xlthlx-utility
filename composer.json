@@ -16,7 +16,7 @@
   ],
   "require": {
     "deeplcom/deepl-php": "^0.4.1",
-    "scrivo/highlight.php": "v9.18.1.9",
+    "scrivo/highlight.php": "v9.18.1.10",
     "wpackagist-plugin/cmb2": "^2.11"
   },
   "require-dev": {
