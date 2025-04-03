@@ -319,9 +319,16 @@ function get_lang(): string {
  */
 function get_url_trans(): string {
 
-	$link     = get_abs_url();
-	$pos      = strpos( $link, '/en/' );
-	$pos_page = strpos( $link, '/page/' );
+	$link      = get_abs_url();
+	$url_query = '';
+	$query_pos = strpos( $link, '/?' );
+	$pos       = strpos( $link, '/en/' );
+	$pos_page  = strpos( $link, '/page/' );
+
+	if ( false !== $query_pos ) {
+		$url_query = '?' . wp_parse_url( $link, PHP_URL_QUERY );
+		$link      = str_replace( $url_query, '', $link );
+	}
 
 	if ( is_front_page() ) {
 		if ( false === $pos ) {
@@ -334,7 +341,7 @@ function get_url_trans(): string {
 			$link = str_replace( 'en/', '', $link );
 		}
 
-		return $link;
+		return $link . $url_query;
 	}
 
 	if ( is_category() ) {
@@ -344,7 +351,7 @@ function get_url_trans(): string {
 			$link = str_replace( 'en/', '', $link );
 		}
 
-		return $link;
+		return $link . $url_query;
 	}
 
 	if ( is_search() ) {
@@ -358,7 +365,7 @@ function get_url_trans(): string {
 			$link = str_replace( 'en/', '', $link );
 		}
 
-		return $link;
+		return $link . $url_query;
 	}
 
 	if ( false === $pos ) {
@@ -375,7 +382,7 @@ function get_url_trans(): string {
 		}
 	}
 
-	return $link;
+	return $link . $url_query;
 }
 
 /**
