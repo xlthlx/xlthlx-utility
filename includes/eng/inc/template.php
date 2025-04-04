@@ -517,7 +517,7 @@ function xlt_search_url_rewrite(): void {
 	$needle      = '/' . $search_base . '/';
 	$uri         = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 
-	if ( ! str_contains( $uri, $needle ) && str_contains( $uri, '&lang=en' ) ) {
+	if ( ! str_contains( $uri, $needle ) && str_contains( $uri, 'lang=en' ) ) {
 
 		$search = rawurlencode( get_query_var( 's' ) );
 		$search = str_replace( '%2F', '/', $search );
