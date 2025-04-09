@@ -626,3 +626,14 @@ function xlt_change_rss_feed_text( string $text ): string {
 }
 
 add_filter( 'slim_seo_feed_text', 'xlt_change_rss_feed_text' );
+
+/**
+ * Remove Akismet inline style.
+ *
+ * @return void
+ */
+function xlt_remove_akismet_style() {
+	wp_styles()->add_data( 'akismet-widget-style', 'after', '' );
+}
+
+add_action( 'wp_print_styles', 'xlt_remove_akismet_style' );
