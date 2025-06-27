@@ -420,7 +420,7 @@ if ( ! function_exists( 'xlt_print_menu' ) ) {
 			foreach ( $menu_items as $menu_item ) {
 				if ( $menu_item['url'] ) { ?>
 					<li class="xlt-inline">
-						<a <?php echo esc_attr( $menu_item['target'] ); ?>
+						<a <?php echo ('' !== $menu_item['target'])? 'target="'.esc_attr( $menu_item['target'] ).'" ':''; ?>
 								href="<?php echo esc_url( $menu_item['url'] ); ?>"
 								title="<?php echo esc_attr( $menu_item['title'] ); ?>">
 							<?php echo esc_attr( $menu_item['title'] ); ?>
@@ -476,7 +476,7 @@ if ( ! function_exists( 'xlt_get_menu_items' ) ) {
 		$menu_array[ $i ]['url']     = '#' !== $menu->url ? $menu->url : false;
 		$title_en                    = '' !== get_title_en( $menu->object_id ) ? get_title_en( $menu->object_id ) : $menu->title;
 		$menu_array[ $i ]['title']   = 'it' === $lang ? $menu->title : $title_en;
-		$menu_array[ $i ]['target']  = ! empty( $menu->target ) ? ' target="' . $menu->target . '"' : '';
+		$menu_array[ $i ]['target']  = ! empty( $menu->target ) ? $menu->target : '';
 		$menu_array[ $i ]['classes'] = ! empty( $menu->classes ) ? implode( ' ', $menu->classes ) : '';
 
 		return $menu_array;
