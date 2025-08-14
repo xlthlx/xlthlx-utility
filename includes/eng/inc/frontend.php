@@ -37,7 +37,7 @@ function get_abs_url(): bool|string {
  *
  * @return array|string
  */
-function get_trans( string $element ): array|string {
+function get_trans( string $element ) {
 	$trans_content = '';
 	$auth_key      = get_option( 'deepl_auth_key' );
 
