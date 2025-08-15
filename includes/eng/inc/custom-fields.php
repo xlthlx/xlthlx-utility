@@ -114,7 +114,14 @@ add_filter( 'manage_pages_columns', 'xlt_eng_posts_columns', 20 );
 function xlt_eng_posts_custom_columns( string $column_name, int $id ): void {
 
 	if ( 'comments-number' === $column_name ) {
-		$comments_number = ( get_comments_number( $id ) === '0' ) ? '' : get_comments_number( $id );
+		$comments_count  = get_comments(
+			array(
+				'post_id'      => $id,
+				'type__not_in' => 'subscription',
+				'count'        => true,
+			)
+		);
+		$comments_number = ( 0 === $comments_count ) ? '' : $comments_count;
 		$comments_open   = ( comments_open( $id ) ) ? '' : 'Commenti chiusi';
 		$pings_open      = ( pings_open( $id ) ) ? '' : 'Trackback chiusi';
 
