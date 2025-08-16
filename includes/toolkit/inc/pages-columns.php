@@ -18,6 +18,7 @@ function xlt_page_column_views( array $columns ): array {
 	return array_merge(
 		$columns,
 		array(
+			'thumbs'      => __( 'Miniatura', 'xlthlx' ),
 			'page-layout' => __( 'Template', 'xlthlx' ),
 			'modified'    => __( 'Data ultima modifica', 'xlthlx' ),
 			'date'        => __( 'Date', 'xlthlx' ),
@@ -33,6 +34,9 @@ function xlt_page_column_views( array $columns ): array {
  * @param int    $id The post ID.
  */
 function xlt_page_custom_column_views( string $column_name, int $id ): void {
+	if ( 'thumbs' === $column_name ) {
+		echo get_the_post_thumbnail( $id, 'thumbnail' );
+	}
 	if ( 'page-layout' === $column_name ) {
 		$set_template = get_post_meta(
 			get_the_ID(),
