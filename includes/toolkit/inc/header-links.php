@@ -36,6 +36,7 @@ function xlt_disable_links() {
 	remove_action( 'wp_head', 'wlwmanifest_link' );
 	remove_action( 'wp_head', 'wp_shortlink_wp_head' );
 	remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
+	remove_action( 'wp_head', 'rest_output_link_wp_head' );
 
 	add_action( 'widgets_init', 'xlt_remove_comments_style' );
 }
