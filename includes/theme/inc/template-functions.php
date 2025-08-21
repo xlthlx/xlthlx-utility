@@ -209,11 +209,11 @@ function xlt_admin_color_scheme(): void {
 		'xlthlx',
 		__( 'Xlthlx', 'xlthlx' ),
 		XLT_PLUGIN_URL . 'includes/theme/css/color-scheme.min.css',
-		array( '#1e2327', '#fff', '#92285e', '#6667ab' ),
+		array( '#282A36', '#F2F2F2', '#92285E', '#6667AB' ),
 		array(
-			'base'    => '#ffffff',
-			'focus'   => '#92285e',
-			'current' => '#ffffff',
+			'base'    => '#F2F2F2',
+			'focus'   => '#6667AB',
+			'current' => '#F2F2F2',
 		)
 	);
 }
