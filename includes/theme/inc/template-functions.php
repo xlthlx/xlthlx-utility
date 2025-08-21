@@ -613,19 +613,25 @@ function xlt_make_it_snow(): void {
 add_action( 'wp_footer', 'xlt_make_it_snow' );
 
 /**
- * Change the Feed RSS text for Slim SEO.
+ * Add link into RSS Feeds.
  *
- * @param string $text The Feed RSS text for Slim SEO.
+ * @param string $content The RSS Feed content.
  *
  * @return string
  */
-function xlt_change_rss_feed_text( string $text ): string {
+function xlt_add_feed_link( $content ) {
 	global $lang;
 
-	return ( 'en' === $lang ) ? 'Read more &raquo;' : 'Continua a leggere &raquo;';
+	$text     = ( 'en' === $lang ) ? 'Read more &raquo;' : 'Continua a leggere &raquo;';
+	$content .= "\n" . '<p><a href="' . esc_url( get_permalink() ) . '">' . esc_html( $text ) . '</a></p>';
+	return $content;
 }
 
-add_filter( 'slim_seo_feed_text', 'xlt_change_rss_feed_text' );
+add_filter( 'the_content_feed', 'xlt_add_feed_link' );
+
+if ( get_option( 'rss_use_excerpt' ) ) {
+	add_filter( 'the_excerpt_rss', 'xlt_add_feed_link' );
+}
 
 /**
  * Remove Akismet inline style.
